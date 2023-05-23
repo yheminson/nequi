@@ -5,13 +5,78 @@ from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue import DynamicFrame
+import boto3
+import datetime
+import kaggle
+import logging
+import numpy as np
+import os
+import pandas as pd
+import zipfile
 
+# Declaracion de variables
+
+bucket_name = f'prueba-nequi-yheminson'
+data_set_1='riyapatel1697/imdb-official-movies-dataset'
+name_data_set_1='imdb-official-movies-dataset.zip'
+name_process='imdb'
+path_1='./download/'
+path_2='./destination/'
+path_3='./log/'
+path_4=f'./procesado_{name_process}/'
+current_date = datetime.datetime.now()
+access_key='AKIA6DEWUCC7WWLTEQ6Q'
+secret_key='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'
 args = getResolvedOptions(sys.argv, ["JOB_NAME"])
 sc = SparkContext()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
+
+# Manejo de logs
+logging.basicConfig(filename=f'{path_3}log_{name_process}.txt', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+
+# Descarga DataSet
+
+# Crear el directorio si no existe
+try:
+    os.makedirs(path_1)
+    logging.info(f'Se creo el directorio {path_1}')
+except:
+    logging.info(f'No se crea el directorio {path_1} porque ya existe')
+
+try:
+    # Descargar archivos utilizando kaggle.api
+    kaggle.api.dataset_download_files(data_set_1, path=path_1)
+    logging.info(f'DataSet {name_data_set_1} descargados exitosamente.')
+except Exception as e:
+    logging.error(f"Error al descargar el DataSet {name_data_set_1}: {str(e)}")
+    
+# Descomprime el DataSet
+
+# Crear el directorio si no existe
+try:
+    os.makedirs(path_2)
+    logging.info(f'Se creo el directorio {path_2}')
+except:
+    logging.info(f'No se crea el directorio {path_2} porque ya existe')
+
+try:
+    with zipfile.ZipFile(path_1 + name_data_set_1, 'r') as data_set_comp:
+        data_set_comp.extractall(path_2)
+    logging.info(f'Se descomprimio el DataSet {name_data_set_1}')
+
+except Exception as e:
+    logging.error(f"Error al descomprimir el DataSet {name_data_set_1}: {str(e)}")
+    
+#Se borra el DataSet que se descargo y ya se descomprimio
+try:
+    os.remove(path_1 + name_data_set_1)
+    logging.info(f'Se elimina el DataSet {name_data_set_1}')
+    
+except Exception as e:
+    logging.error(f"Error al borrar el DataSet {name_data_set_1}: {str(e)}")
 
 # Script generated for node S3 bucket
 S3bucket_node1 = glueContext.create_dynamic_frame.from_options(
