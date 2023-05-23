@@ -1,0 +1,42 @@
+{
+  "name" : "mubi",
+  "description" : "",
+  "role" : "arn:aws:iam::968831013055:role/service-role/AWSGlueServiceRole",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-968831013055-us-east-1/scripts/mubi.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-968831013055-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-968831013055-us-east-1/temporary/"
+  },
+  "connections" : {
+    "connections" : [ "redshift" ]
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 2880,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "3.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1684786966998\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://prueba-nequi-yheminson/mubi/mubi_movie_data.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"Amazon S3\",\"OptimizePerformance\":true,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"movie_id\",\"Type\":\"int\"},{\"Name\":\"movie_title\",\"Type\":\"string\"},{\"Name\":\"movie_release_year\",\"Type\":\"string\"},{\"Name\":\"movie_url\",\"Type\":\"string\"},{\"Name\":\"movie_title_language\",\"Type\":\"string\"},{\"Name\":\"movie_popularity\",\"Type\":\"string\"},{\"Name\":\"movie_image_url\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://prueba-nequi-yheminson/mubi/mubi_movie_data.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1684791590609\":{\"AmazonRedshiftTarget\":{\"Data\":{\"AccessType\":\"connection\",\"Action\":\"merge\",\"AdvancedOptions\":[],\"Connection\":{\"Description\":\"-\",\"Label\":\"redshift\",\"Value\":\"redshift\"},\"IamRole\":{\"Label\":\"AWSGlueServiceRole\",\"Value\":\"AWSGlueServiceRole\"},\"MergeAction\":\"simple\",\"MergeWhenMatched\":\"update\",\"MergeWhenNotMatched\":\"insert\",\"Schema\":{\"Label\":\"public\",\"Value\":\"public\"},\"SelectedColumns\":[{\"Description\":\"INTEGER\",\"Label\":\"movie_id\",\"Value\":\"movie_id\"}],\"SourceType\":\"table\",\"StagingTable\":\"public.mubi_ratings_data_temp_85e589\",\"Table\":{\"Description\":\"public\",\"Label\":\"mubi_ratings_data\",\"Value\":\"mubi_ratings_data\"},\"TableSchema\":[{\"Description\":\"INTEGER\",\"Label\":\"movie_id\",\"Value\":\"movie_id\"},{\"Description\":\"VARCHAR\",\"Label\":\"rating_id\",\"Value\":\"rating_id\"},{\"Description\":\"VARCHAR\",\"Label\":\"rating_url\",\"Value\":\"rating_url\"},{\"Description\":\"VARCHAR\",\"Label\":\"rating_score\",\"Value\":\"rating_score\"},{\"Description\":\"VARCHAR\",\"Label\":\"rating_timestamp_utc\",\"Value\":\"rating_timestamp_utc\"},{\"Description\":\"VARCHAR\",\"Label\":\"critic_likes\",\"Value\":\"critic_likes\"},{\"Description\":\"VARCHAR\",\"Label\":\"critic_comments\",\"Value\":\"critic_comments\"},{\"Description\":\"VARCHAR\",\"Label\":\"user_id\",\"Value\":\"user_id\"},{\"Description\":\"BOOLEAN\",\"Label\":\"user_trialist\",\"Value\":\"user_trialist\"},{\"Description\":\"BOOLEAN\",\"Label\":\"user_subscriber\",\"Value\":\"user_subscriber\"},{\"Description\":\"BOOLEAN\",\"Label\":\"user_eligible_for_trial\",\"Value\":\"user_eligible_for_trial\"},{\"Description\":\"BOOLEAN\",\"Label\":\"user_has_payment_method\",\"Value\":\"user_has_payment_method\"}],\"TempDir\":\"s3://aws-glue-assets-968831013055-us-east-1/temporary/\",\"Upsert\":false},\"Inputs\":[\"node-1684791573721\"],\"Name\":\"Amazon Redshift\"}},\"node-1684787296546\":{\"AmazonRedshiftTarget\":{\"Data\":{\"AccessType\":\"connection\",\"Action\":\"merge\",\"AdvancedOptions\":[],\"Connection\":{\"Description\":\"-\",\"Label\":\"redshift\",\"Value\":\"redshift\"},\"IamRole\":{\"Label\":\"AWSGlueServiceRole\",\"Value\":\"AWSGlueServiceRole\"},\"MergeAction\":\"simple\",\"MergeWhenMatched\":\"update\",\"MergeWhenNotMatched\":\"insert\",\"Schema\":{\"Label\":\"public\",\"Value\":\"public\"},\"SelectedColumns\":[{\"Description\":\"INTEGER\",\"Label\":\"movie_id\",\"Value\":\"movie_id\"},{\"Description\":\"VARCHAR\",\"Label\":\"movie_title\",\"Value\":\"movie_title\"}],\"SourceType\":\"table\",\"StagingTable\":\"public.mubi_movie_data_temp_cd89c9\",\"Table\":{\"Description\":\"public\",\"Label\":\"mubi_movie_data\",\"Value\":\"mubi_movie_data\"},\"TableSchema\":[{\"Description\":\"INTEGER\",\"Label\":\"movie_id\",\"Value\":\"movie_id\"},{\"Description\":\"VARCHAR\",\"Label\":\"movie_title\",\"Value\":\"movie_title\"},{\"Description\":\"VARCHAR\",\"Label\":\"movie_release_year\",\"Value\":\"movie_release_year\"},{\"Description\":\"VARCHAR\",\"Label\":\"movie_url\",\"Value\":\"movie_url\"},{\"Description\":\"VARCHAR\",\"Label\":\"movie_title_language\",\"Value\":\"movie_title_language\"},{\"Description\":\"VARCHAR\",\"Label\":\"movie_popularity\",\"Value\":\"movie_popularity\"},{\"Description\":\"VARCHAR\",\"Label\":\"movie_image_url\",\"Value\":\"movie_image_url\"}],\"TempDir\":\"s3://aws-glue-assets-968831013055-us-east-1/temporary/\",\"Upsert\":false},\"Inputs\":[\"node-1684786966998\"],\"Name\":\"Amazon Redshift\"}},\"node-1684791573721\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://prueba-nequi-yheminson/mubi/mubi_ratings_data.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"Amazon S3\",\"OptimizePerformance\":true,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"movie_id\",\"Type\":\"int\"},{\"Name\":\"rating_id\",\"Type\":\"string\"},{\"Name\":\"rating_url\",\"Type\":\"string\"},{\"Name\":\"rating_score\",\"Type\":\"string\"},{\"Name\":\"rating_timestamp_utc\",\"Type\":\"string\"},{\"Name\":\"critic_likes\",\"Type\":\"string\"},{\"Name\":\"critic_comments\",\"Type\":\"string\"},{\"Name\":\"user_id\",\"Type\":\"string\"},{\"Name\":\"user_trialist\",\"Type\":\"boolean\"},{\"Name\":\"user_subscriber\",\"Type\":\"boolean\"},{\"Name\":\"user_eligible_for_trial\",\"Type\":\"boolean\"},{\"Name\":\"user_has_payment_method\",\"Type\":\"boolean\"}]}],\"Paths\":[\"s3://prueba-nequi-yheminson/mubi/mubi_ratings_data.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "nequi",
+    "branch" : "dev",
+    "folder" : "mubi"
+  }
+}
